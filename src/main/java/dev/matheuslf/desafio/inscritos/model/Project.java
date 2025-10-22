@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -30,11 +29,10 @@ public class Project {
     public Project() {
     }
 
-    public Project(Long id, String name, String description, Date endDate) {
-        this.id = id;
+    public Project(String name, String description, Date startDate, Date endDate) {
         this.name = name;
         this.description = description;
-        this.startDate = Date.from(Instant.now());
+        this.startDate = startDate;
         this.endDate = endDate;
     }
 
