@@ -21,8 +21,10 @@ public class Project {
 
     private String description;
 
+    @Column(name = "start_date")
     private Date startDate;
 
+    @Column(name = "end_date")
     private Date endDate;
 
     public Project() {

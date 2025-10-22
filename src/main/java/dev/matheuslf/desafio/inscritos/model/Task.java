@@ -28,6 +28,7 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private Priority priority;
 
+    @Column(name = "due_date")
     private Date dueDate;
 
     @ManyToOne
