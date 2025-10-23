@@ -314,7 +314,3 @@ docker-compose down -v
 - **Configuração Docker/docker-compose** ✅
 - **Uso de MapStruct** ✅
 - **Testes de API com RestAssured** ✅
-
-## Licença
-
-Este projeto foi desenvolvido exclusivamente para o processo seletivo SIS Innov & Tech e não deve ser utilizado para fins comerciais.
