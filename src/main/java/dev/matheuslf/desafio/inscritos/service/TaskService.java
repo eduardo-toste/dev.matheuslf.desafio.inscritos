@@ -33,8 +33,11 @@ public class TaskService {
         Project projeto = projectRepository.findById(request.projectId())
                 .orElseThrow(ProjectNotFoundException::new);
 
-        Task task = taskRepository.save(taskMapper.toEntity(request, projeto));
-        return task.getId();
+        Task task = taskMapper.toEntity(request, projeto);
+        task.setStatus(Status.TODO);
+
+        Task savedTask = taskRepository.save(task);
+        return savedTask.getId();
     }
 
     public Page<TaskResponse> buscarTasks(Pageable pageable, Status status, Priority priority, Long projectId) {

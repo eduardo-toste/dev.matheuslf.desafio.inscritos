@@ -18,9 +18,6 @@ public record CreateTaskRequest(
         String description,
 
         @Enumerated(EnumType.STRING)
-        Status status,
-
-        @Enumerated(EnumType.STRING)
         Priority priority,
 
         Date dueDate,
