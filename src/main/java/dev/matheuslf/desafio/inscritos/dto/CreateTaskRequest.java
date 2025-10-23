@@ -11,7 +11,7 @@ import java.util.Date;
 
 public record CreateTaskRequest(
 
-        @NotBlank
+        @NotBlank(message = "Titulo é obrigatório.")
         @Size(min = 5, max = 150)
         String title,
 
