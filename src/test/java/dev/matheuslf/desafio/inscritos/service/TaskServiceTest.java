@@ -54,7 +54,6 @@ class TaskServiceTest {
         );
 
         task = new Task(
-                1L,
                 "Task Teste",
                 "Task usada para teste",
                 Status.TODO,
@@ -62,6 +61,7 @@ class TaskServiceTest {
                 Date.from(Instant.now().plusSeconds(900000)),
                 project
         );
+        task.setId(1L);
     }
 
     @Test
