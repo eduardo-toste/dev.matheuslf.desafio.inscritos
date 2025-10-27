@@ -40,7 +40,7 @@ public class TaskController {
     }
 
     @PutMapping("/{id}/status")
-    public ResponseEntity<TaskResponse> atualizarStatus(@PathVariable Long id, @RequestBody UpdateTaskStatusRequest request) {
+    public ResponseEntity<TaskResponse> atualizarStatus(@PathVariable Long id, @RequestBody @Valid UpdateTaskStatusRequest request) {
         TaskResponse taskAtualizada = taskService.atualizarStatus(id, request);
         return ResponseEntity.ok().body(taskAtualizada);
     }
