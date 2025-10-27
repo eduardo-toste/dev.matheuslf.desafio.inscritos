@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProjectIntegrationTest extends IntegrationTestBase {
 
     @Test
-    void deveCriarProjetoComDadosValidos() throws Exception {
+    void deveCriarProjetoComSucesso_QuandoDadosValidos() throws Exception {
         var request = new CreateProjectRequest(
                 "Projeto Teste 2",
                 "Descrição de segundo projeto teste",
