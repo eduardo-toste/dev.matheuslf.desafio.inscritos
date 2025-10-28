@@ -1,6 +1,6 @@
 package dev.matheuslf.desafio.inscritos.restassured;
 
-import dev.matheuslf.desafio.inscritos.dto.CreateProjectRequest;
+import dev.matheuslf.desafio.inscritos.dto.request.CreateProjectRequest;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import utils.RestAssuredTestBase;

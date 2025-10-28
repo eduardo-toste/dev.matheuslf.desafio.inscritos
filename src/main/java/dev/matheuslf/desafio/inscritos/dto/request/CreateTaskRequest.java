@@ -1,7 +1,6 @@
-package dev.matheuslf.desafio.inscritos.dto;
+package dev.matheuslf.desafio.inscritos.dto.request;
 
 import dev.matheuslf.desafio.inscritos.model.enums.Priority;
-import dev.matheuslf.desafio.inscritos.model.enums.Status;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;

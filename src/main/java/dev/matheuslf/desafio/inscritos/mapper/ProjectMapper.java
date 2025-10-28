@@ -1,7 +1,7 @@
 package dev.matheuslf.desafio.inscritos.mapper;
 
-import dev.matheuslf.desafio.inscritos.dto.CreateProjectRequest;
-import dev.matheuslf.desafio.inscritos.dto.ProjectResponse;
+import dev.matheuslf.desafio.inscritos.dto.request.CreateProjectRequest;
+import dev.matheuslf.desafio.inscritos.dto.response.ProjectResponse;
 import dev.matheuslf.desafio.inscritos.model.Project;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

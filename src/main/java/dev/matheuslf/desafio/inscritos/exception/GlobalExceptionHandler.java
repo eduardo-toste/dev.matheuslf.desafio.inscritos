@@ -1,7 +1,7 @@
 package dev.matheuslf.desafio.inscritos.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import dev.matheuslf.desafio.inscritos.dto.ErrorResponse;
+import dev.matheuslf.desafio.inscritos.dto.response.ErrorResponse;
 import dev.matheuslf.desafio.inscritos.utils.ErrorBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

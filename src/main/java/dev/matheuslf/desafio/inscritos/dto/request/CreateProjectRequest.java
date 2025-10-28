@@ -1,4 +1,4 @@
-package dev.matheuslf.desafio.inscritos.dto;
+package dev.matheuslf.desafio.inscritos.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

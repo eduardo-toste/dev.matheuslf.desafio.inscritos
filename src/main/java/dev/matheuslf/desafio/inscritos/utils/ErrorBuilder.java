@@ -1,6 +1,6 @@
 package dev.matheuslf.desafio.inscritos.utils;
 
-import dev.matheuslf.desafio.inscritos.dto.ErrorResponse;
+import dev.matheuslf.desafio.inscritos.dto.response.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

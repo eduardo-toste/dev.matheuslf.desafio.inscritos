@@ -1,6 +1,6 @@
 package dev.matheuslf.desafio.inscritos.integration;
 
-import dev.matheuslf.desafio.inscritos.dto.CreateProjectRequest;
+import dev.matheuslf.desafio.inscritos.dto.request.CreateProjectRequest;
 import dev.matheuslf.desafio.inscritos.model.Project;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;

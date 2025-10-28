@@ -1,8 +1,8 @@
 package dev.matheuslf.desafio.inscritos.controller;
 
-import dev.matheuslf.desafio.inscritos.dto.CreateTaskRequest;
-import dev.matheuslf.desafio.inscritos.dto.TaskResponse;
-import dev.matheuslf.desafio.inscritos.dto.UpdateTaskStatusRequest;
+import dev.matheuslf.desafio.inscritos.dto.request.CreateTaskRequest;
+import dev.matheuslf.desafio.inscritos.dto.response.TaskResponse;
+import dev.matheuslf.desafio.inscritos.dto.request.UpdateTaskStatusRequest;
 import dev.matheuslf.desafio.inscritos.model.enums.Priority;
 import dev.matheuslf.desafio.inscritos.model.enums.Status;
 import dev.matheuslf.desafio.inscritos.service.TaskService;

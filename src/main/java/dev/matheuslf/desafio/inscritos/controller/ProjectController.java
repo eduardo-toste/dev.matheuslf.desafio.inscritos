@@ -1,8 +1,7 @@
 package dev.matheuslf.desafio.inscritos.controller;
 
-import dev.matheuslf.desafio.inscritos.dto.CreateProjectRequest;
-import dev.matheuslf.desafio.inscritos.dto.ProjectResponse;
-import dev.matheuslf.desafio.inscritos.repository.ProjectRepository;
+import dev.matheuslf.desafio.inscritos.dto.request.CreateProjectRequest;
+import dev.matheuslf.desafio.inscritos.dto.response.ProjectResponse;
 import dev.matheuslf.desafio.inscritos.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

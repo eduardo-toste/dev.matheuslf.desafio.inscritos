@@ -1,7 +1,4 @@
-package dev.matheuslf.desafio.inscritos.dto;
-
-import dev.matheuslf.desafio.inscritos.model.Project;
-import org.springframework.data.domain.Page;
+package dev.matheuslf.desafio.inscritos.dto.response;
 
 import java.util.Date;
 
