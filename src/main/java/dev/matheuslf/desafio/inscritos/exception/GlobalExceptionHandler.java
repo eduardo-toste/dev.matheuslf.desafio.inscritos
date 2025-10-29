@@ -19,13 +19,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             ProjectNotFoundException.class,
-            TaskNotFoundException.class
+            TaskNotFoundException.class,
+            UserNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(
             RuntimeException ex,
             HttpServletRequest request
     ) {
         return ErrorBuilder.build(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(ExistentUserException.class)
+    public ResponseEntity<ErrorResponse> handleExistentUserException(
+            ExistentUserException ex,
+            HttpServletRequest request
+    ) {
+        return ErrorBuilder.build(HttpStatus.CONFLICT, ex.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
