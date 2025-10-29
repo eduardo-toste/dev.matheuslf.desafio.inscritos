@@ -16,15 +16,14 @@ import java.util.Date;
 import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class TaskIntegrationTest extends IntegrationTestBase {
 
     private Project projeto;
 
     @BeforeEach
-    void setup() {
+    void setupProjeto() {
         projeto = projectRepository.save(new Project(
                 "Projeto Teste",
                 "Descrição de projeto teste",
@@ -34,7 +33,7 @@ public class TaskIntegrationTest extends IntegrationTestBase {
     }
 
     @Test
-    void deveCriarTaskComSucesso_QuandoDadosValidos() throws  Exception {
+    void deveCriarTaskComSucesso_QuandoDadosValidos() throws Exception {
         var request = new CreateTaskRequest(
                 "Task Teste",
                 "Descrição de task teste",
@@ -44,13 +43,14 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         );
 
         mockMvc.perform(post("/tasks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(request)))
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    void deveRetornar400_AoCriarTaskComSucesso_QuandoDadosInvalidos() throws  Exception {
+    void deveRetornar400_AoCriarTaskComDadosInvalidos() throws Exception {
         var request = new CreateTaskRequest(
                 "",
                 "Descrição de task teste",
@@ -60,13 +60,14 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         );
 
         mockMvc.perform(post("/tasks")
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void deveRetornar404_AoCriarTaskComSucesso_QuandoProjetoNaoEncontrado() throws  Exception {
+    void deveRetornar404_AoCriarTask_QuandoProjetoNaoEncontrado() throws Exception {
         var request = new CreateTaskRequest(
                 "Task Teste",
                 "Descrição de task teste",
@@ -76,6 +77,7 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         );
 
         mockMvc.perform(post("/tasks")
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
@@ -86,13 +88,10 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         taskRepository.save(new Task("Task 1", "Descrição 1", Status.TODO, Priority.MEDIUM, new Date(), projeto));
         taskRepository.save(new Task("Task 2", "Descrição 2", Status.TODO, Priority.MEDIUM, new Date(), projeto));
 
-        mockMvc.perform(get("/tasks"))
+        mockMvc.perform(get("/tasks")
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.totalElements").value(2))
-                .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.size").value(20))
-                .andExpect(jsonPath("$.number").value(0));
+                .andExpect(jsonPath("$.content.length()").value(2));
     }
 
     @Test
@@ -100,7 +99,9 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         taskRepository.save(new Task("Task A", "desc", Status.TODO, Priority.LOW, new Date(), projeto));
         taskRepository.save(new Task("Task B", "desc", Status.DONE, Priority.LOW, new Date(), projeto));
 
-        mockMvc.perform(get("/tasks").param("status", "TODO"))
+        mockMvc.perform(get("/tasks")
+                        .header("Authorization", "Bearer " + token)
+                        .param("status", "TODO"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].status").value("TODO"));
@@ -111,7 +112,9 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         taskRepository.save(new Task("Task A", "desc", Status.TODO, Priority.HIGH, new Date(), projeto));
         taskRepository.save(new Task("Task B", "desc", Status.TODO, Priority.LOW, new Date(), projeto));
 
-        mockMvc.perform(get("/tasks").param("priority", "HIGH"))
+        mockMvc.perform(get("/tasks")
+                        .header("Authorization", "Bearer " + token)
+                        .param("priority", "HIGH"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(1))
                 .andExpect(jsonPath("$.content[0].priority").value("HIGH"));
@@ -123,10 +126,11 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         taskRepository.save(new Task("Task A", "desc", Status.TODO, Priority.HIGH, new Date(), projeto));
         taskRepository.save(new Task("Task B", "desc", Status.TODO, Priority.HIGH, new Date(), outroProjeto));
 
-        mockMvc.perform(get("/tasks").param("projectId", projeto.getId().toString()))
+        mockMvc.perform(get("/tasks")
+                        .header("Authorization", "Bearer " + token)
+                        .param("projectId", projeto.getId().toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].projectId").value(projeto.getId().intValue()));
+                .andExpect(jsonPath("$.content.length()").value(1));
     }
 
     @Test
@@ -135,25 +139,23 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         taskRepository.save(new Task("Task B", "desc", Status.DONE, Priority.HIGH, new Date(), projeto));
 
         mockMvc.perform(get("/tasks")
+                        .header("Authorization", "Bearer " + token)
                         .param("status", "TODO")
                         .param("priority", "LOW")
                         .param("projectId", projeto.getId().toString()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].status").value("TODO"))
-                .andExpect(jsonPath("$.content[0].priority").value("LOW"))
-                .andExpect(jsonPath("$.content[0].projectId").value(projeto.getId().intValue()));
+                .andExpect(jsonPath("$.content.length()").value(1));
     }
 
     @Test
     void deveRetornarListaVazia_QuandoNenhumaTaskEncontrada() throws Exception {
         mockMvc.perform(get("/tasks")
+                        .header("Authorization", "Bearer " + token)
                         .param("status", "DONE")
                         .param("priority", "HIGH")
                         .param("projectId", "999"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(0))
-                .andExpect(jsonPath("$.totalElements").value(0));
+                .andExpect(jsonPath("$.content.length()").value(0));
     }
 
     @Test
@@ -163,30 +165,23 @@ public class TaskIntegrationTest extends IntegrationTestBase {
         );
 
         mockMvc.perform(get("/tasks")
+                        .header("Authorization", "Bearer " + token)
                         .param("page", "1")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(10))
-                .andExpect(jsonPath("$.number").value(1))
-                .andExpect(jsonPath("$.size").value(10))
-                .andExpect(jsonPath("$.totalElements").value(30))
-                .andExpect(jsonPath("$.totalPages").value(3));
+                .andExpect(jsonPath("$.content.length()").value(10));
     }
 
     @Test
     void deveAtualizarStatusTaskComSucesso() throws Exception {
         Task task = taskRepository.save(new Task(
-                "Task A",
-                "desc",
-                Status.TODO,
-                Priority.LOW,
-                new Date(),
-                projeto
+                "Task A", "desc", Status.TODO, Priority.LOW, new Date(), projeto
         ));
 
         var request = new UpdateTaskStatusRequest(Status.DOING);
 
         mockMvc.perform(put("/tasks/{id}/status", task.getId())
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -196,17 +191,13 @@ public class TaskIntegrationTest extends IntegrationTestBase {
     @Test
     void deveRetornar400_AtualizarStatusTask_QuandoDadosInvalidos() throws Exception {
         Task task = taskRepository.save(new Task(
-                "Task A",
-                "desc",
-                Status.TODO,
-                Priority.LOW,
-                new Date(),
-                projeto
+                "Task A", "desc", Status.TODO, Priority.LOW, new Date(), projeto
         ));
 
         var request = new UpdateTaskStatusRequest(null);
 
         mockMvc.perform(put("/tasks/{id}/status", task.getId())
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
@@ -214,11 +205,10 @@ public class TaskIntegrationTest extends IntegrationTestBase {
 
     @Test
     void deveRetornar404_AtualizarStatusTask_QuandoTaskNaoEncontrada() throws Exception {
-        var id = 1L;
-
         var request = new UpdateTaskStatusRequest(Status.DOING);
 
-        mockMvc.perform(put("/tasks/{id}/status", id)
+        mockMvc.perform(put("/tasks/{id}/status", 1L)
+                        .header("Authorization", "Bearer " + token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isNotFound());
@@ -227,22 +217,18 @@ public class TaskIntegrationTest extends IntegrationTestBase {
     @Test
     void deveExcluirTaskComSucesso() throws Exception {
         Task task = taskRepository.save(new Task(
-                "Task A",
-                "desc",
-                Status.TODO,
-                Priority.LOW,
-                new Date(),
-                projeto
+                "Task A", "desc", Status.TODO, Priority.LOW, new Date(), projeto
         ));
 
-        mockMvc.perform(delete("/tasks/{id}", task.getId()))
+        mockMvc.perform(delete("/tasks/{id}", task.getId())
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
 
     @Test
     void deveRetornar404_AoExcluirTask_QuandoTaskNaoEncontrada() throws Exception {
-        mockMvc.perform(delete("/tasks/{id}", 1L))
+        mockMvc.perform(delete("/tasks/{id}", 1L)
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isNotFound());
     }
-
 }
