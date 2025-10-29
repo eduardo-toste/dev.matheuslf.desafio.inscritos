@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,14 +21,29 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({
             ProjectNotFoundException.class,
-            TaskNotFoundException.class,
-            UserNotFoundException.class
+            TaskNotFoundException.class
     })
     public ResponseEntity<ErrorResponse> handleNotFoundException(
             RuntimeException ex,
             HttpServletRequest request
     ) {
         return ErrorBuilder.build(HttpStatus.NOT_FOUND, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(
+            UserNotFoundException ex,
+            HttpServletRequest request
+    ) {
+        return ErrorBuilder.build(HttpStatus.UNAUTHORIZED, "Usuário não encontrado.", request.getRequestURI());
+    }
+
+    @ExceptionHandler({BadCredentialsException.class, InternalAuthenticationServiceException.class})
+    public ResponseEntity<ErrorResponse> handleBadCredentials(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+        return ErrorBuilder.build(HttpStatus.UNAUTHORIZED, "Credenciais inválidas.", request.getRequestURI());
     }
 
     @ExceptionHandler(ExistentUserException.class)
