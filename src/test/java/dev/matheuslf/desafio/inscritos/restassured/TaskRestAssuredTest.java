@@ -43,6 +43,7 @@ public class TaskRestAssuredTest extends RestAssuredTestBase {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .body(request)
                 .when()
                 .post("/tasks")
@@ -62,6 +63,7 @@ public class TaskRestAssuredTest extends RestAssuredTestBase {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .body(request)
                 .when()
                 .post("/tasks")
@@ -84,6 +86,7 @@ public class TaskRestAssuredTest extends RestAssuredTestBase {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .body(request)
                 .when()
                 .put("/tasks/{id}/status", task.getId())
@@ -98,6 +101,7 @@ public class TaskRestAssuredTest extends RestAssuredTestBase {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .body(request)
                 .when()
                 .put("/tasks/999/status")
@@ -111,6 +115,7 @@ public class TaskRestAssuredTest extends RestAssuredTestBase {
         taskRepository.save(new Task("Task B", "desc", Status.DONE, Priority.MEDIUM, new Date(), projeto));
 
         given()
+                .header("Authorization", "Bearer " + token)
                 .queryParam("status", "TODO")
                 .when()
                 .get("/tasks")
@@ -125,6 +130,7 @@ public class TaskRestAssuredTest extends RestAssuredTestBase {
         var task = taskRepository.save(new Task("Task a excluir", "desc", Status.TODO, Priority.LOW, new Date(), projeto));
 
         given()
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("/tasks/{id}", task.getId())
                 .then()
@@ -134,6 +140,7 @@ public class TaskRestAssuredTest extends RestAssuredTestBase {
     @Test
     void deveRetornar404_QuandoExcluirTaskInexistente() {
         given()
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .delete("/tasks/{id}", 999L)
                 .then()

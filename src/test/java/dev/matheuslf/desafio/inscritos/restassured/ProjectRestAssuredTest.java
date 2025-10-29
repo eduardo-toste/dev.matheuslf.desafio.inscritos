@@ -24,6 +24,7 @@ public class ProjectRestAssuredTest extends RestAssuredTestBase {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .body(request)
                 .when()
                 .post("/projects")
@@ -42,6 +43,7 @@ public class ProjectRestAssuredTest extends RestAssuredTestBase {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
                 .body(request)
                 .when()
                 .post("/projects")
@@ -59,6 +61,7 @@ public class ProjectRestAssuredTest extends RestAssuredTestBase {
         );
 
         given()
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/projects")
                 .then()
@@ -70,6 +73,7 @@ public class ProjectRestAssuredTest extends RestAssuredTestBase {
     @Test
     void deveRetornarListaVazia_QuandoNenhumProjetoEncontrado() {
         given()
+                .header("Authorization", "Bearer " + token)
                 .when()
                 .get("/projects")
                 .then()
